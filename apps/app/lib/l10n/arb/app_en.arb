@@ -1,0 +1,7 @@
+{
+    "@@locale": "en",
+    "appName": "Frappify",
+    "@appName": {
+        "description": "The name of the app"
+    }
+}

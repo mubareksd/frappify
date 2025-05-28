@@ -1,0 +1,7 @@
+{
+  "@@locale": "ar",
+  "appName": "فرابيفي",
+  "@appName": {
+    "description": "الاسم الرسمي للتطبيق"
+  }
+}

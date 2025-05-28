@@ -1,0 +1,58 @@
+name: Flutter test
+
+on:
+  pull_request_target:
+    paths-ignore:
+      - "**.md"
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+
+jobs:
+  build:
+    name: Flutter test
+    runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.head_ref || github.run_id }}
+      cancel-in-progress: true
+    strategy:
+      matrix:
+        project:
+          - name: pos
+            path: apps/pos
+          - name: cds
+            path: apps/cds
+          - name: dashboard
+            path: apps/dashboard
+          #   - name: kds
+          #     path: apps/kds
+          - name: app_logger
+            path: packages/app_logger
+          - name: app_ui
+            path: packages/app_ui
+          - name: frappe_client
+            path: packages/frappe_client
+          - name: persistent_storage
+            path: packages/persistent_storage
+          - name: secure_storage
+            path: packages/secure_storage
+          - name: storage
+            path: packages/storage
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2.18.0
+        with:
+          channel: "stable"
+          cache: true
+
+      - name: Install dependencies
+        working-directory: ${{ matrix.project.path }}
+        run: flutter pub get
+
+      - name: Test
+        working-directory: ${{ matrix.project.path }}
+        run: flutter test

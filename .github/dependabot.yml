@@ -1,0 +1,50 @@
+version: 2
+updates:
+  - package-ecosystem: "pub"
+    directory: "/apps/cds"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/apps/dashboard"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/apps/kds"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/apps/pos"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/app_logger"
+    schedule:
+      interval: "daily"
+  - package-ecosystem: "pub"
+    directory: "/packages/app_ui"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/frappe_client"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/persistent_storage"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/secure_storage"
+    schedule:
+      interval: "daily"
+
+  - package-ecosystem: "pub"
+    directory: "/packages/storage"
+    schedule:
+      interval: "daily"

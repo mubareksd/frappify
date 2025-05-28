@@ -1,0 +1,78 @@
+name: frappify
+packages:
+  - apps/*
+  - packages/*
+
+command:
+  bootstrap:
+    environment:
+      sdk: ^3.8.0
+      flutter: ^3.32.0
+
+scripts:
+  # collect coverage information for all packages
+  coverage: >
+    melos exec -c 1 --fail-fast --dir-exists=test -- \
+      flutter test --coverage && melos run coverage:cleanup
+
+  # cleanup generated files from coverage
+  coverage:cleanup: >
+    melos exec --file-exists=coverage/lcov.info -- \
+      lcov --remove coverage/lcov.info \
+        '**/*.freezed.dart' \
+        '**/*.g.dart' \
+        '**/*.mocks.dart' \
+        '**/l10n/*.dart' \
+        '**/*.pb*.dart' \
+        --ignore-errors unused \
+        -o coverage/lcov.info
+
+  # format all packages' files except for generated files
+  format:exclude: >
+    melos exec -c 1 -- \
+      "find $MELOS_PACKAGE_PATH -name '*.dart' \
+          ! -name '*.freezed.dart' \
+          ! -name '*.g.dart' \
+          ! -name '*.mocks.dart' \
+          ! -path '*/l10n/*' \
+          ! -name '*.pb*.dart' \
+          ! -path '*/.*/*' \
+          | xargs dart format --set-exit-if-changed"
+
+  # run build_runner to generate code in all packages
+  generate: >
+    melos exec -c 1 --fail-fast --depends-on="build_runner" -- \
+      dart run build_runner build --delete-conflicting-outputs
+
+  # run gen-l10n to generate localizations in all packages
+  gen-l10n: >
+    melos exec -c 1 --fail-fast --file-exists="lib/l10n.dart" -- \
+     flutter gen-l10n
+
+  # remove unused translations in all packages, you have to have jq installed.
+  clean-l10n: >
+    melos exec --depends-on="translations_cleaner" -c 1 -- \
+      dart run translations_cleaner clean-translations && \
+      find . -name "*.arb" -exec sh -c 'jq . --indent 2 {} > temp.json && mv temp.json {}' \;
+
+  # run integration tests in all packages
+  integration_test: >
+    melos exec -c 1 --fail-fast --dir-exists=integration_test -- \
+      flutter test integration_test
+
+  # runs "flutter pub <arg(s)>" in all packages
+  pub: melos exec -c 1 -- flutter pub "$@"
+
+  # run tests in all packages
+  test: >
+    melos exec -c 1 --fail-fast --dir-exists=test -- \
+      flutter test
+
+  # run pub upgrade in all packages
+  upgrade: melos exec -c 1 flutter pub upgrade
+
+  cleanup: >
+    melos exec -c 1 --fail-fast --dir-exists=build -- \
+      rm -rf build
+    melos exec -c 1 --fail-fast --dir-exists=coverage -- \
+      rm -rf coverage
