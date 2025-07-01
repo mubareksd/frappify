@@ -1,4 +1,5 @@
 name: frappify
+
 packages:
   - apps/*
   - packages/*
