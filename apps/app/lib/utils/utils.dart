@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:frappe_client/frappe_client.dart';
 
 String getInitials(String input) {
   var words = input.split(RegExp(r'[\s-]+')).map((word) {
@@ -102,4 +103,38 @@ class MouseScrollBehavior extends MaterialScrollBehavior {
     PointerDeviceKind.unknown,
     PointerDeviceKind.stylus,
   };
+}
+
+Future<dynamic> getFilters(
+    FrappeClient frappe,
+    dynamic filtersJson,
+    dynamic dynamicFiltersJson,
+    ) async {
+  if (filtersJson is List) {
+    final filters = [];
+    if (filtersJson != '[]') {
+      for (final i in filtersJson) {
+        filters.add(i);
+      }
+    }
+
+    if (dynamicFiltersJson != null) {
+      for (final i in dynamicFiltersJson as List) {
+        final dynamicFilter = [];
+        for (final j in i as List) {
+          if (j == 'frappe.defaults.get_user_default("Company")') {
+          } else {
+            dynamicFilter.add(j);
+          }
+        }
+        filters.add(dynamicFilter);
+      }
+    }
+
+    return filters;
+  } else if (filtersJson is Map) {
+    final filters = {};
+
+    return filters;
+  }
 }

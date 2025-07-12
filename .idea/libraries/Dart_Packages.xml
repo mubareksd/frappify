@@ -517,7 +517,7 @@
         <entry key="frappe_dart">
           <value>
             <list>
-              <option value="$USER_HOME$/.puro/shared/pub_cache/git/frappe_dart-00db3042181c94006d5c83511d38bef97476a13f//lib" />
+              <option value="$USER_HOME$/.puro/shared/pub_cache/git/frappe_dart-0e6b0c84dfbfd3b357b611703158c07c3a7dcb27//lib" />
             </list>
           </value>
         </entry>
@@ -1390,7 +1390,7 @@
       <root url="file://$USER_HOME$/.puro/envs/stable/flutter/packages/flutter_web_plugins/lib" />
       <root url="file://$USER_HOME$/.puro/shared/caches/dd93de6fb1776398bf586cbd477deade1391c7e4/dart-sdk/pkg/_macros/lib" />
       <root url="file://$USER_HOME$/.puro/shared/pub_cache/git/flutter-shadcn-ui-3dac50ba2f220f0437d488e43cf2f61a22d64214//lib" />
-      <root url="file://$USER_HOME$/.puro/shared/pub_cache/git/frappe_dart-00db3042181c94006d5c83511d38bef97476a13f//lib" />
+      <root url="file://$USER_HOME$/.puro/shared/pub_cache/git/frappe_dart-0e6b0c84dfbfd3b357b611703158c07c3a7dcb27//lib" />
       <root url="file://$USER_HOME$/.puro/shared/pub_cache/hosted/pub.dev/_fe_analyzer_shared-76.0.0/lib" />
       <root url="file://$USER_HOME$/.puro/shared/pub_cache/hosted/pub.dev/_fe_analyzer_shared-82.0.0/lib" />
       <root url="file://$USER_HOME$/.puro/shared/pub_cache/hosted/pub.dev/analyzer-6.11.0/lib" />

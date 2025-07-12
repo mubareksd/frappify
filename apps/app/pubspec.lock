@@ -508,7 +508,7 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "00db3042181c94006d5c83511d38bef97476a13f"
+      resolved-ref: "0e6b0c84dfbfd3b357b611703158c07c3a7dcb27"
       url: "https://github.com/kinetsystems/frappe_dart"
     source: git
     version: "0.0.6"
