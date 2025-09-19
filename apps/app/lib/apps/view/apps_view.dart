@@ -159,7 +159,7 @@ class AppsView extends StatelessWidget {
             builder: (context) => DeskPage(workspace: name),
           ),
         );
-            },
+      },
       borderRadius: BorderRadius.circular(6),
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.xs),

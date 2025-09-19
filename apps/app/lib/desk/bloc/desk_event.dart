@@ -27,11 +27,15 @@ class LoadWorkspacesEvent extends DeskEvent {
   List<Object?> get props => [workspace];
 }
 
-class LoadWorkspaceEvent extends DeskEvent {
-  const LoadWorkspaceEvent({required this.workspaceId});
+class LoadPageEvent extends DeskEvent {
+  const LoadPageEvent({
+    required this.type,
+    required this.name,
+  });
 
-  final String workspaceId;
+  final String type;
+  final String name;
 
   @override
-  List<Object?> get props => [workspaceId];
+  List<Object?> get props => [type, name];
 }

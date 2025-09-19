@@ -106,10 +106,10 @@ class MouseScrollBehavior extends MaterialScrollBehavior {
 }
 
 Future<dynamic> getFilters(
-    FrappeClient frappe,
-    dynamic filtersJson,
-    dynamic dynamicFiltersJson,
-    ) async {
+  FrappeClient frappe,
+  dynamic filtersJson,
+  dynamic dynamicFiltersJson,
+) async {
   if (filtersJson is List) {
     final filters = [];
     if (filtersJson != '[]') {

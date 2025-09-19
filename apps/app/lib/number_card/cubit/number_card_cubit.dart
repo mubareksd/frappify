@@ -21,7 +21,7 @@ class NumberCardCubit extends Cubit<NumberCardState> {
       frappe,
       json.decode(numberCardDoc.docs![0].filtersJson!),
       numberCardDoc.docs![0].dynamicFiltersJson != null
-          ? json.decode(numberCardDoc.docs![0].dynamicFiltersJson as String)
+          ? json.decode(numberCardDoc.docs![0].dynamicFiltersJson!)
           : null,
     );
 

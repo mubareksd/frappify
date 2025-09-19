@@ -2,13 +2,14 @@ import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:frappify/apps/apps.dart';
+import 'package:frappify/dashboard/view/view.dart';
 import 'package:frappify/desk/desk.dart';
-import 'package:frappify/number_card/number_card.dart';
 import 'package:frappify/settings/settings.dart';
 import 'package:frappify/utils/utils.dart';
+import 'package:frappify/workspace/view/view.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:responsive_framework/responsive_framework.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:responsive_grid_list/responsive_grid_list.dart';
 
 class DeskView extends StatefulWidget {
   const DeskView({super.key});
@@ -78,7 +79,7 @@ class _DeskViewState extends State<DeskView> {
             child: Column(
               children: [
                 _buildAppBar(context, state, theme, responsive),
-                if (state.currentWorkspace != null)
+                if (state.currentPage?.name != null)
                   _buildWorkspaceHeader(context, state, theme, responsive),
                 _buildMainContent(context, state, theme, responsive),
               ],
@@ -102,7 +103,10 @@ class _DeskViewState extends State<DeskView> {
         });
         if (state.workspaces != null && index < state.workspaces!.length) {
           context.read<DeskBloc>().add(
-            LoadWorkspaceEvent(workspaceId: state.workspaces![index].name!),
+            LoadPageEvent(
+              name: state.workspaces![index].name!,
+              type: 'Workspace',
+            ),
           );
         }
         Navigator.pop(context);
@@ -143,7 +147,9 @@ class _DeskViewState extends State<DeskView> {
           .toList();
       final isExpanded = _expandedWorkspaces.contains(workspace.name);
       final hasChildren = children.isNotEmpty;
-      final isActive = workspace.name == state.currentWorkspace;
+      final isActive =
+          workspace.name == state.currentPage?.name &&
+          state.currentPage?.type == 'Workspace';
 
       // Add workspace item
       items.add(
@@ -192,7 +198,7 @@ class _DeskViewState extends State<DeskView> {
               // Expand parent workspaces when selecting a workspace
               _expandParentWorkspaces(state, workspace.name!);
               context.read<DeskBloc>().add(
-                LoadWorkspaceEvent(workspaceId: workspace.name!),
+                LoadPageEvent(name: workspace.name!, type: 'Workspace'),
               );
               Navigator.pop(context);
             },
@@ -208,7 +214,7 @@ class _DeskViewState extends State<DeskView> {
               .toList();
           final childIsExpanded = _expandedWorkspaces.contains(child.name);
           final childHasChildren = childChildren.isNotEmpty;
-          final childIsActive = child.name == state.currentWorkspace;
+          final childIsActive = child.name == state.currentPage?.name;
 
           items.add(
             Padding(
@@ -261,7 +267,7 @@ class _DeskViewState extends State<DeskView> {
                   // Expand parent workspaces when selecting a child
                   _expandParentWorkspaces(state, child.name!);
                   context.read<DeskBloc>().add(
-                    LoadWorkspaceEvent(workspaceId: child.name!),
+                    LoadPageEvent(name: child.name!, type: 'Workspace'),
                   );
                   Navigator.pop(context);
                 },
@@ -273,7 +279,7 @@ class _DeskViewState extends State<DeskView> {
           if (childHasChildren && childIsExpanded && level < 1) {
             for (final grandchild in childChildren) {
               final grandchildIsActive =
-                  grandchild.name == state.currentWorkspace;
+                  grandchild.name == state.currentPage?.name;
 
               items.add(
                 Padding(
@@ -315,7 +321,10 @@ class _DeskViewState extends State<DeskView> {
                       // Expand parent workspaces when selecting a grandchild
                       _expandParentWorkspaces(state, grandchild.name!);
                       context.read<DeskBloc>().add(
-                        LoadWorkspaceEvent(workspaceId: grandchild.name!),
+                        LoadPageEvent(
+                          name: grandchild.name!,
+                          type: 'Workspace',
+                        ),
                       );
                       Navigator.pop(context);
                     },
@@ -344,7 +353,21 @@ class _DeskViewState extends State<DeskView> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildLogo(theme),
+          Row(
+            children: [
+              _buildLogo(theme),
+              const HugeIcon(
+                icon: HugeIcons.strokeRoundedArrowRight01,
+                color: Colors.grey,
+              ),
+              Text(state.currentPage?.type ?? ''),
+              const HugeIcon(
+                icon: HugeIcons.strokeRoundedArrowRight01,
+                color: Colors.grey,
+              ),
+              Text(state.currentPage?.name ?? ''),
+            ],
+          ),
           _buildAppBarActions(context, state, theme, responsive),
         ],
       ),
@@ -732,8 +755,8 @@ class _DeskViewState extends State<DeskView> {
             ),
           ),
           const SizedBox(width: 5),
-          if (state.currentWorkspace != null)
-            Text(state.currentWorkspace!, style: theme.textTheme.h4)
+          if (state.currentPage?.name != null)
+            Text(state.currentPage!.name!, style: theme.textTheme.h4)
           else
             const ShimmerContainer(width: 200, height: 24),
         ],
@@ -759,7 +782,40 @@ class _DeskViewState extends State<DeskView> {
           children: [
             if (responsive.isDesktop)
               _buildDesktopSidebar(context, state, theme),
-            Expanded(child: _buildContentArea(context, state, theme)),
+
+            BlocBuilder<DeskBloc, DeskState>(
+              builder: (context, state) {
+                if (state.currentPage == null) {
+                  return const Expanded(
+                    child: Center(
+                      child: Text('No page selected'),
+                    ),
+                  );
+                }
+
+                if (state.currentPage!.type == 'Workspace') {
+                  return Expanded(
+                    child: WorkspacePage(
+                      name: state.currentPage!.name ?? '',
+                    ),
+                  );
+                }
+
+                if (state.currentPage!.type == 'Dashboard') {
+                  return Expanded(
+                    child: DashboardPage(
+                      name: state.currentPage!.name ?? '',
+                    ),
+                  );
+                }
+
+                return const Expanded(
+                  child: Center(
+                    child: Text('No page selected'),
+                  ),
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -818,7 +874,9 @@ class _DeskViewState extends State<DeskView> {
     int level,
   ) {
     final workspaceName = workspace.name?.toString();
-    final isActive = workspaceName == state.currentWorkspace;
+    final isActive =
+        workspace.name == state.currentPage?.name &&
+        state.currentPage?.type == 'Workspace';
     final isExpanded = _expandedWorkspaces.contains(workspaceName);
     final hasChildren = children.isNotEmpty;
 
@@ -849,7 +907,7 @@ class _DeskViewState extends State<DeskView> {
                 // Expand parent workspaces when selecting a child
                 _expandParentWorkspaces(state, workspaceName);
                 context.read<DeskBloc>().add(
-                  LoadWorkspaceEvent(workspaceId: workspaceName),
+                  LoadPageEvent(name: workspaceName, type: 'Workspace'),
                 );
               }
             },
@@ -975,235 +1033,6 @@ class _DeskViewState extends State<DeskView> {
           SizedBox(width: 8),
           Expanded(child: ShimmerContainer(width: double.infinity, height: 40)),
         ],
-      ),
-    );
-  }
-
-  Widget _buildContentArea(
-    BuildContext context,
-    DeskState state,
-    ShadThemeData theme,
-  ) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(24),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: state.isLoadingWorkspace
-            ? _buildContentShimmer(theme)
-            : state.workspace != null
-            ? Column(
-                key: ValueKey(state.currentWorkspace),
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (state.workspace?.charts?.items?.isNotEmpty == true)
-                    _buildChartsSection(context, state, theme),
-                  if (state.workspace?.numberCards?.items?.isNotEmpty == true)
-                    _buildNumberCardsSection(context, state, theme),
-                  if (state.workspace?.shortcuts?.items?.isNotEmpty == true)
-                    _buildShortcutsSection(context, state, theme),
-                  if (state.workspace?.cards?.items?.isNotEmpty == true)
-                    _buildCardsSection(context, state, theme),
-                ],
-              )
-            : _buildContentShimmer(theme),
-      ),
-    );
-  }
-
-  Widget _buildContentShimmer(ShadThemeData theme) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Shortcuts section shimmer
-        const ShimmerContainer(width: 150, height: 24),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: List.generate(
-            6,
-            (index) => const ShimmerContainer(width: 120, height: 60),
-          ),
-        ),
-        const SizedBox(height: 32),
-        // Cards section shimmer
-        const ShimmerContainer(width: 180, height: 24),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: List.generate(
-            20,
-            (index) => const ShimmerContainer(width: 200, height: 120),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildChartsSection(
-    BuildContext context,
-    DeskState state,
-    ShadThemeData theme,
-  ) {
-    return Container();
-  }
-
-  Widget _buildNumberCardsSection(
-    BuildContext context,
-    DeskState state,
-    ShadThemeData theme,
-  ) {
-    return ResponsiveGridList(
-      minItemWidth: 300,
-      maxItemsPerRow: 4,
-      listViewBuilderOptions: ListViewBuilderOptions(
-        physics: const NeverScrollableScrollPhysics(),
-        shrinkWrap: true,
-      ),
-      children: state.workspace!.numberCards!.items!.map((entry) {
-        return NumberCardPage(
-          name: entry.label ?? '',
-        );
-      }).toList(),
-    );
-  }
-
-  Widget _buildNumberCardItem(
-    String title,
-    double amount,
-    ShadThemeData theme,
-  ) {
-    return ShadCard(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.h4,
-            ),
-            Text(
-              NumberFormat.decimalPattern().format(amount),
-              style: theme.textTheme.h4,
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildShortcutsSection(
-    BuildContext context,
-    DeskState state,
-    ShadThemeData theme,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text('Your Shortcuts', style: theme.textTheme.h3),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: (state.workspace?.shortcuts?.items ?? [])
-              .map((shortcut) => _buildShortcutCard(shortcut, theme))
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildShortcutCard(dynamic shortcut, ShadThemeData theme) {
-    return InkWell(
-      onTap: () => _showComingSoonDialog(context),
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              shortcut.label?.toString() ?? 'Unknown',
-              style: theme.textTheme.small,
-            ),
-            const SizedBox(width: 8),
-            Icon(Icons.arrow_outward, color: theme.colorScheme.primary),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildCardsSection(
-    BuildContext context,
-    DeskState state,
-    ShadThemeData theme,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const SizedBox(height: 32),
-        Text('Reports & Masters', style: theme.textTheme.h3),
-        const SizedBox(height: 16),
-        Wrap(
-          spacing: 16,
-          runSpacing: 16,
-          children: (state.workspace?.cards?.items ?? [])
-              .map((card) => _buildCardItem(card, theme))
-              .toList(),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCardItem(dynamic card, ShadThemeData theme) {
-    return ShadCard(
-      child: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              card.label?.toString() ?? 'Unknown',
-              style: theme.textTheme.h4,
-            ),
-            const SizedBox(height: 12),
-            if (card.links != null)
-              ...(card.links as List<dynamic>).map(
-                (link) => _buildLinkItem(link, theme),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLinkItem(dynamic link, ShadThemeData theme) {
-    return InkWell(
-      onTap: () => _showComingSoonDialog(context),
-      child: Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.link,
-              size: 16,
-              color: theme.colorScheme.mutedForeground,
-            ),
-            const SizedBox(width: 8),
-            Flexible(
-              child: Text(
-                link.label?.toString() ?? 'Unknown',
-                style: theme.textTheme.small.copyWith(
-                  color: theme.colorScheme.mutedForeground,
-                ),
-                overflow: TextOverflow.ellipsis,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

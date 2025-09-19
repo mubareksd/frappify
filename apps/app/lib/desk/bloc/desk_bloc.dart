@@ -4,9 +4,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:frappe_client/frappe_client.dart';
 import 'package:frappe_dart/src/models/desk_sidebar_items_response/desk_page.dart';
-import 'package:frappe_dart/src/models/desktop_page_request.dart';
-import 'package:frappe_dart/src/models/desktop_page_response/message.dart';
-import 'package:frappe_dart/src/models/number_card_response.dart';
+import 'package:frappify/desk/model/current_page.dart';
 import 'package:frappify/login/login.dart';
 import 'package:secure_storage/secure_storage.dart';
 
@@ -19,7 +17,7 @@ class DeskBloc extends Bloc<DeskEvent, DeskState> {
     on<LogoutEvent>(_onLogout);
     on<LoadUserDataEvent>(_onLoadUserData);
     on<LoadWorkspacesEvent>(_onLoadWorkspaces);
-    on<LoadWorkspaceEvent>(_onLoadWorkspace);
+    on<LoadPageEvent>(_onLoadPage);
   }
 
   final FrappeClient frappe;
@@ -71,11 +69,13 @@ class DeskBloc extends Bloc<DeskEvent, DeskState> {
                   word.isEmpty ? '' : word[0].toUpperCase() + word.substring(1),
             )
             .join(' ');
-        print('workspace_id: $workspaceId');
-        add(LoadWorkspaceEvent(workspaceId: workspaceId));
+        add(LoadPageEvent(name: workspaceId, type: 'Workspace'));
       } else {
         add(
-          LoadWorkspaceEvent(workspaceId: workspaces.message!.pages![0].name!),
+          LoadPageEvent(
+            name: workspaces.message!.pages![0].name!,
+            type: 'Workspace',
+          ),
         );
       }
     } catch (e, stack) {
@@ -83,28 +83,20 @@ class DeskBloc extends Bloc<DeskEvent, DeskState> {
     }
   }
 
-  Future<void> _onLoadWorkspace(
-    LoadWorkspaceEvent event,
+  Future<void> _onLoadPage(
+    LoadPageEvent event,
     Emitter<DeskState> emit,
   ) async {
     try {
-      // Set loading state to true
-      emit(state.copyWith(isLoadingWorkspace: true));
-
-      final workspace = await frappe.getDesktopPage(
-        DesktopPageRequest(name: event.workspaceId),
-      );
-
       emit(
         state.copyWith(
-          workspace: workspace.message,
-          currentWorkspace: event.workspaceId,
-          isLoadingWorkspace: false,
+          currentPage: CurrentPage(
+            type: event.type,
+            name: event.name,
+          ),
         ),
       );
     } catch (e, stack) {
-      // Set loading state to false on error
-      emit(state.copyWith(isLoadingWorkspace: false));
       await AppLogger.reportError(e, stack, 'Failed to load workspace');
     }
   }

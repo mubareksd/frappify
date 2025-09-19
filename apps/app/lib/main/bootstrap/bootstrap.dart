@@ -9,7 +9,7 @@ import 'package:flutter/widgets.dart';
 import 'package:frappe_client/frappe_client.dart';
 import 'package:frappify/main/bootstrap/app_bloc_observer.dart';
 import 'package:frappify/utils/platform.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+import 'package:hive_ce_flutter/hive_flutter.dart';
 import 'package:hydrated_bloc/hydrated_bloc.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:persistent_storage/persistent_storage.dart';

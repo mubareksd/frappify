@@ -1,9 +1,9 @@
 import 'package:app_ui/app_ui.dart';
 import 'package:flutter/material.dart';
-import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:frappify/number_card/number_card.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:frappify/number_card/number_card.dart';
 import 'package:hugeicons/hugeicons.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NumberCardView extends StatelessWidget {
   const NumberCardView({super.key});
@@ -35,7 +35,7 @@ class NumberCardView extends StatelessWidget {
     return BlocBuilder<NumberCardCubit, NumberCardState>(
       builder: (context, state) {
         if (state.value == null || state.showPercentage == null) {
-          return ShimmerContainer(
+          return const ShimmerContainer(
             width: 400,
             height: 100,
           );

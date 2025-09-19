@@ -44,7 +44,7 @@ android {
 
     defaultConfig {
         applicationId = "et.kinet.frappify"
-        minSdk = 23
+        minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInt()
         versionName = flutterVersionName
@@ -107,5 +107,5 @@ flutter {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.9.20")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib:2.1.0")
 }
