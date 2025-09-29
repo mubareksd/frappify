@@ -6,7 +6,6 @@
   "configurations": [
     {
       "name": "Frappify Launch development",
-      "cwd": "apps/app",
       "request": "launch",
       "type": "dart",
       "program": "lib/main/main_development.dart",
@@ -20,7 +19,6 @@
     },
     {
       "name": "Frappify Launch staging",
-      "cwd": "apps/app",
       "request": "launch",
       "type": "dart",
       "program": "lib/main/main_staging.dart",
@@ -28,7 +26,6 @@
     },
     {
       "name": "Frappify Launch production",
-      "cwd": "apps/app",
       "request": "launch",
       "type": "dart",
       "program": "lib/main/main_production.dart",
