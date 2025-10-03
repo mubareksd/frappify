@@ -111,7 +111,7 @@ app.*.map.json
 !.idea/dictionaries/
 !.idea/runConfigurations/
 
-lib/l10n/generated/
+lib/l10n/gen/
 
 .mason
 mason-lock.json

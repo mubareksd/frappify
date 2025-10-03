@@ -44,7 +44,7 @@ class NumberCardView extends StatelessWidget {
         return ShadCard(
           padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
           width: 400,
-          border: Border.all(
+          border: ShadBorder.all(
             color: theme.colorScheme.border,
           ),
           child: Column(

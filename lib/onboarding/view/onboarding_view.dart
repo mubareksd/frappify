@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:frappify/l10n/l10n.dart';
 import 'package:frappify/login/login.dart';
 import 'package:frappify/onboarding/onboarding.dart';
@@ -19,9 +20,12 @@ class OnboardingView extends StatefulWidget {
 }
 
 class _OnboardingViewState extends State<OnboardingView> {
-  final ShadTextEditingController hostaddress = ShadTextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final ShadTextEditingController hostAddressController =
+      ShadTextEditingController();
+  final GlobalKey<FormState> _hostFormKey = GlobalKey<FormState>();
   late OnboardingBloc onboardingBloc;
+
+  final _introKey = GlobalKey<IntroductionScreenState>();
 
   @override
   void initState() {
@@ -34,59 +38,86 @@ class _OnboardingViewState extends State<OnboardingView> {
     final theme = ShadTheme.of(context);
     return BlocListener<OnboardingBloc, OnboardingState>(
       listener: (context, state) {
+        if (state.isLoading) {
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (context) {
+              return Center(
+                child: SpinKitWave(
+                  color: ShadTheme.of(context).colorScheme.primary,
+                ),
+              );
+            },
+          );
+        } else {
+          if (Navigator.canPop(context)) {
+            Navigator.of(context).pop();
+          }
+        }
         if (state.onboardingCompleted) {
           Navigator.of(context).pushReplacement(
             MaterialPageRoute<void>(builder: (_) => const LoginPage()),
           );
         }
       },
-      child: IntroductionScreen(
-        pages: [
-          //Build language selection onboarding page
-          _buildLanguageOnboardingPage(),
-
-          //Build theme selection onboarding page
-          _buildThemeOnboardingPage(),
-
-          _buildOnboardingPage(
-            title: 'Page 1',
-            body: 'Page 1 Description',
-            icon: Icons.ac_unit,
-          ),
-          _buildOnboardingPage(
-            title: 'Page 2',
-            body: 'Page 2 Description',
-            icon: Icons.access_alarm,
-          ),
-          _buildOnboardingPage(
-            title: 'Page 3',
-            body: 'Page 3 Description',
-            icon: Icons.access_time,
-          ),
-          PageViewModel(
-            title: 'Host Name',
-            image: Icon(
-              HugeIcons.strokeRoundedConnect,
-              color: theme.colorScheme.primary,
-              size: 50,
-            ),
-            bodyWidget: _buildHostAddressForm(context),
-          ),
-        ],
-        onDone: () {
-          if (_formKey.currentState?.validate() ?? false) {
-            onboardingBloc.add(
-              CompleteOnboardingEvent(hostAddress: hostaddress.text),
-            );
-          } else {
-            // Error toast is handled within the validator now
-          }
+      child: BlocBuilder<OnboardingBloc, OnboardingState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              IntroductionScreen(
+                key: _introKey,
+                pages: [
+                  _buildLanguageOnboardingPage(),
+                  _buildThemeOnboardingPage(),
+                  _buildOnboardingPage(
+                    title: 'Page 1',
+                    body: 'Page 1 Description',
+                    icon: Icons.ac_unit,
+                  ),
+                  _buildOnboardingPage(
+                    title: 'Page 2',
+                    body: 'Page 2 Description',
+                    icon: Icons.access_alarm,
+                  ),
+                  _buildOnboardingPage(
+                    title: 'Page 3',
+                    body: 'Page 3 Description',
+                    icon: Icons.access_time,
+                  ),
+                  PageViewModel(
+                    title: 'Host Name',
+                    image: Icon(
+                      HugeIcons.strokeRoundedConnect,
+                      color: theme.colorScheme.primary,
+                      size: 50,
+                    ),
+                    bodyWidget: _buildHostAddressForm(context),
+                  ),
+                ],
+                onDone: () {
+                  if (_hostFormKey.currentState?.validate() ?? false) {
+                    onboardingBloc.add(
+                      CompleteOnboardingEvent(
+                        hostAddress: hostAddressController.text,
+                      ),
+                    );
+                  }
+                },
+                showSkipButton: true,
+                skip: const Text('Skip'),
+                next: const Icon(Icons.arrow_forward),
+                done: const Text(
+                  'Done',
+                  style: TextStyle(fontWeight: FontWeight.w600),
+                ),
+                dotsDecorator: DotsDecorator(
+                  activeColor: theme.colorScheme.primary,
+                ),
+              ),
+            ],
+          );
         },
-        showSkipButton: true,
-        skip: const Text('Skip'),
-        next: const Icon(Icons.arrow_forward),
-        done: const Text('Done', style: TextStyle(fontWeight: FontWeight.w600)),
-        dotsDecorator: DotsDecorator(activeColor: theme.colorScheme.primary),
       ),
     );
   }
@@ -94,13 +125,13 @@ class _OnboardingViewState extends State<OnboardingView> {
   Widget _buildHostAddressForm(BuildContext context) {
     final theme = ShadTheme.of(context);
     return Form(
-      key: _formKey,
+      key: _hostFormKey,
       child: Column(
         children: [
           SizedBox(
             width: 400,
             child: ShadInputFormField(
-              controller: hostaddress,
+              controller: hostAddressController,
               label: Text(
                 'Host Address',
                 style: TextStyle(color: theme.colorScheme.foreground),
@@ -130,6 +161,16 @@ class _OnboardingViewState extends State<OnboardingView> {
                 }
 
                 return null; // Return null when valid
+              },
+              textInputAction: TextInputAction.done,
+              onSubmitted: (_) {
+                if (_hostFormKey.currentState?.validate() ?? false) {
+                  onboardingBloc.add(
+                    CompleteOnboardingEvent(
+                      hostAddress: hostAddressController.text,
+                    ),
+                  );
+                }
               },
             ),
           ),

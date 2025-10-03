@@ -1107,10 +1107,10 @@ packages:
     description:
       path: "."
       ref: HEAD
-      resolved-ref: "8cb1028c9160baaf254e1f67704c733bd9485bbf"
+      resolved-ref: d8e54a6060b52164ca9bd31fd4990fdc8894861e
       url: "https://github.com/nank1ro/flutter-shadcn-ui"
     source: git
-    version: "0.31.9"
+    version: "0.36.1"
   shared_preferences:
     dependency: transitive
     description:
@@ -1356,6 +1356,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "0.6.11"
+  theme_extensions_builder_annotation:
+    dependency: transitive
+    description:
+      name: theme_extensions_builder_annotation
+      sha256: "5ed8e758c33a011fa8a2fd6af2d951cd5500874f465cea379aa7db80807aa7e9"
+      url: "https://pub.dev"
+    source: hosted
+    version: "6.0.1"
   time:
     dependency: transitive
     description:
