@@ -1,5 +1,8 @@
 {
-  "cSpell.words": ["frappify", "shadcn_ui"],
+  "cSpell.words": [
+    "frappify",
+    "shadcn_ui"
+  ],
   "[jsonc]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
@@ -20,7 +23,9 @@
   },
   "[dart]": {
     "editor.defaultFormatter": "Dart-Code.dart-code",
-    "editor.rulers": [150]
+    "editor.rulers": [
+      150
+    ]
   },
   "editor.codeActionsOnSave": {
     "source.organizeImports": "explicit"
@@ -28,5 +33,6 @@
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.formatOnPaste": true,
-  "cmake.ignoreCMakeListsMissing": true
+  "cmake.ignoreCMakeListsMissing": true,
+  "dart.flutterSdkPath": ".fvm/versions/3.38.9"
 }

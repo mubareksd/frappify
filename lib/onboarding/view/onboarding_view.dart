@@ -87,8 +87,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                   ),
                   PageViewModel(
                     title: 'Host Name',
-                    image: Icon(
-                      HugeIcons.strokeRoundedConnect,
+                    image: HugeIcon(
+                      icon: HugeIcons.strokeRoundedConnect,
                       color: theme.colorScheme.primary,
                       size: 50,
                     ),

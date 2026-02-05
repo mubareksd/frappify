@@ -46,8 +46,8 @@ class LoginView extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             ShadInputFormField(
-                              leading: Icon(
-                                HugeIcons.strokeRoundedUser,
+                              leading: HugeIcon(
+                                icon: HugeIcons.strokeRoundedUser,
                                 color: ShadTheme.of(
                                   context,
                                 ).colorScheme.mutedForeground,
@@ -60,8 +60,8 @@ class LoginView extends StatelessWidget {
                             ),
                             const SizedBox(height: 10),
                             ShadInputFormField(
-                              leading: Icon(
-                                HugeIcons.strokeRoundedPasswordValidation,
+                              leading: HugeIcon(
+                                icon: HugeIcons.strokeRoundedPasswordValidation,
                                 color: ShadTheme.of(
                                   context,
                                 ).colorScheme.mutedForeground,
@@ -158,10 +158,10 @@ class LoginView extends StatelessWidget {
                     ),
                   );
                 },
-                child: Icon(
+                child: HugeIcon(
                   size: 25,
                   color: ShadTheme.of(context).colorScheme.foreground,
-                  HugeIcons.strokeRoundedSettings02,
+                  icon: HugeIcons.strokeRoundedSettings02,
                 ),
               ),
             ),

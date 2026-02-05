@@ -247,10 +247,10 @@ class _OmMaterialLocalizationsDelegate
   const _OmMaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(final Locale locale) => locale.languageCode == 'om';
+  bool isSupported(Locale locale) => locale.languageCode == 'om';
 
   @override
-  Future<MaterialLocalizations> load(final Locale locale) async {
+  Future<MaterialLocalizations> load(Locale locale) async {
     final localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
     // The locale (in this case `om`) needs to be initialized into the custom
@@ -278,7 +278,7 @@ class _OmMaterialLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(final _OmMaterialLocalizationsDelegate old) => false;
+  bool shouldReload(_OmMaterialLocalizationsDelegate old) => false;
 }
 // #enddocregion Delegate
 

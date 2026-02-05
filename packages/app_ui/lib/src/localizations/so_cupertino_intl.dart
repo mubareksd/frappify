@@ -8,23 +8,25 @@ class _SoCupertinoLocalizationsDelegate
   const _SoCupertinoLocalizationsDelegate();
 
   @override
-  bool isSupported(final Locale locale) => locale.languageCode == 'so';
+  bool isSupported(Locale locale) => locale.languageCode == 'so';
 
   @override
   Future<CupertinoLocalizations> load(Locale locale) {
     final localeName = intl.Intl.canonicalizedLocale(locale.toString());
-    return SynchronousFuture<CupertinoLocalizations>(SoCupertinoLocalization(
-      localeName: localeName,
-      dayFormat: intl.DateFormat('y', localeName),
-      decimalFormat: intl.NumberFormat('#,##0.###', 'en_US'),
-      doubleDigitMinuteFormat: intl.DateFormat('y', localeName),
-      fullYearFormat: intl.DateFormat('y', localeName),
-      mediumDateFormat: intl.DateFormat('EEE, MMM d', localeName),
-      singleDigitHourFormat: intl.DateFormat('y', localeName),
-      singleDigitMinuteFormat: intl.DateFormat('y', localeName),
-      singleDigitSecondFormat: intl.DateFormat('y', localeName),
-      weekdayFormat: intl.DateFormat('y', localeName),
-    ),);
+    return SynchronousFuture<CupertinoLocalizations>(
+      SoCupertinoLocalization(
+        localeName: localeName,
+        dayFormat: intl.DateFormat('y', localeName),
+        decimalFormat: intl.NumberFormat('#,##0.###', 'en_US'),
+        doubleDigitMinuteFormat: intl.DateFormat('y', localeName),
+        fullYearFormat: intl.DateFormat('y', localeName),
+        mediumDateFormat: intl.DateFormat('EEE, MMM d', localeName),
+        singleDigitHourFormat: intl.DateFormat('y', localeName),
+        singleDigitMinuteFormat: intl.DateFormat('y', localeName),
+        singleDigitSecondFormat: intl.DateFormat('y', localeName),
+        weekdayFormat: intl.DateFormat('y', localeName),
+      ),
+    );
   }
 
   @override
@@ -197,12 +199,28 @@ class SoCupertinoLocalization extends GlobalCupertinoLocalizations {
 
   static const LocalizationsDelegate<CupertinoLocalizations> delegate =
       _SoCupertinoLocalizationsDelegate();
-      
-        @override
-        // TODO: implement backButtonLabel
-        String get backButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement cancelButtonLabel
-        String get cancelButtonLabel => throw UnimplementedError();
+
+  @override
+  String get backButtonLabel => 'ተመለስ';
+
+  @override
+  String get cancelButtonLabel => 'ይቅር';
+
+  @override
+  String get collapsedHint => 'ተዘርግቷል';
+
+  @override
+  String get expandedHint => 'ተሰብስቧል';
+
+  @override
+  String get expansionTileCollapsedHint => 'ለመዘርጋት ድርብ ሁለቴ መታ ያድርጉ';
+
+  @override
+  String get expansionTileCollapsedTapHint => 'ለተጨማሪ ዝርዝሮች ይዘርጉ';
+
+  @override
+  String get expansionTileExpandedHint => 'ለመሰብሰብ ሁለቴ መታ ያድርጉ';
+
+  @override
+  String get expansionTileExpandedTapHint => 'ሰብስብ';
 }

@@ -5,13 +5,13 @@ version: 0.1.0+1
 publish_to: none
 
 environment:
-  sdk: ^3.9.2
-  flutter: ^3.35.4
+  sdk: ^3.10.8
+  flutter: ^3.38.9
 
 dependencies:
   flutter:
     sdk: flutter
-  flutter_secure_storage: ^10.0.0-beta.4
+  flutter_secure_storage: ^10.0.0
   storage:
     path: ../storage
 
@@ -19,4 +19,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
-  very_good_analysis: ^9.0.0
+  very_good_analysis: ^10.1.0

@@ -247,10 +247,10 @@ class _TiMaterialLocalizationsDelegate
   const _TiMaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(final Locale locale) => locale.languageCode == 'ti';
+  bool isSupported(Locale locale) => locale.languageCode == 'ti';
 
   @override
-  Future<MaterialLocalizations> load(final Locale locale) async {
+  Future<MaterialLocalizations> load(Locale locale) async {
     final localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
     // The locale (in this case `ti`) needs to be initialized into the custom
@@ -278,7 +278,7 @@ class _TiMaterialLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(final _TiMaterialLocalizationsDelegate old) => false;
+  bool shouldReload(_TiMaterialLocalizationsDelegate old) => false;
 }
 // #enddocregion Delegate
 

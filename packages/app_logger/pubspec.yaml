@@ -5,13 +5,13 @@ version: 0.1.0+1
 publish_to: none
 
 environment:
-  sdk: ^3.9.2
-  flutter: ^3.35.4
+  sdk: ^3.10.8
+  flutter: ^3.38.9
 
 dependencies:
   flutter:
     sdk: flutter
-  logger: ^2.5.0
+  logger: ^2.6.2
   path: ^1.9.1
   path_provider: ^2.1.5
 
@@ -19,4 +19,4 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   mocktail: ^1.0.4
-  very_good_analysis: ^9.0.0
+  very_good_analysis: ^10.1.0

@@ -7,11 +7,13 @@ class _AaWidgetsLocalizationsDelegate
   const _AaWidgetsLocalizationsDelegate();
 
   @override
-  bool isSupported(final Locale locale) => locale.languageCode == 'aa';
+  bool isSupported(Locale locale) => locale.languageCode == 'aa';
 
   @override
   Future<WidgetsLocalizations> load(Locale locale) {
-    return SynchronousFuture<WidgetsLocalizations>(const AaWidgetsLocalization());
+    return SynchronousFuture<WidgetsLocalizations>(
+      const AaWidgetsLocalization(),
+    );
   }
 
   @override
@@ -44,32 +46,34 @@ class AaWidgetsLocalization extends GlobalWidgetsLocalizations {
 
   static const LocalizationsDelegate<WidgetsLocalizations> delegate =
       _AaWidgetsLocalizationsDelegate();
-      
-        @override
-        // TODO: implement copyButtonLabel
-        String get copyButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement cutButtonLabel
-        String get cutButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement lookUpButtonLabel
-        String get lookUpButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement pasteButtonLabel
-        String get pasteButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement searchWebButtonLabel
-        String get searchWebButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement selectAllButtonLabel
-        String get selectAllButtonLabel => throw UnimplementedError();
-      
-        @override
-        // TODO: implement shareButtonLabel
-        String get shareButtonLabel => throw UnimplementedError();
+
+  @override
+  String get copyButtonLabel => 'ቅዳ';
+
+  @override
+  String get cutButtonLabel => 'ቁረጥ';
+
+  @override
+  String get lookUpButtonLabel => 'ይመልከቱ';
+
+  @override
+  String get pasteButtonLabel => 'ለጥፍ';
+
+  @override
+  String get searchWebButtonLabel => 'ድርን ፈልግ';
+
+  @override
+  String get selectAllButtonLabel => 'ሁሉንም ምረጥ';
+
+  @override
+  String get shareButtonLabel => 'አጋራ';
+
+  @override
+  String get noResultsFound => 'ምንም ተተኪዎች አልተገኙም';
+
+  @override
+  String get searchResultsFound => 'ፍለጋ የሚገኙት ተተኪዎች';
+
+  @override
+  String get radioButtonUnselectedLabel => 'unselected';
 }

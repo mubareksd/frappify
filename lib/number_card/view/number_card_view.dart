@@ -102,8 +102,8 @@ class NumberCardView extends StatelessWidget {
                             : Colors.transparent,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        double.tryParse(state.percent ?? '0')! > 0
+                      child: HugeIcon(
+                        icon: double.tryParse(state.percent ?? '0')! > 0
                             ? HugeIcons.strokeRoundedArrowUpRight01
                             : HugeIcons.strokeRoundedArrowDownLeft01,
                         size: 18,

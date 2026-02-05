@@ -247,10 +247,10 @@ class _SoMaterialLocalizationsDelegate
   const _SoMaterialLocalizationsDelegate();
 
   @override
-  bool isSupported(final Locale locale) => locale.languageCode == 'so';
+  bool isSupported(Locale locale) => locale.languageCode == 'so';
 
   @override
-  Future<MaterialLocalizations> load(final Locale locale) async {
+  Future<MaterialLocalizations> load(Locale locale) async {
     final localeName = intl.Intl.canonicalizedLocale(locale.toString());
 
     // The locale (in this case `so`) needs to be initialized into the custom
@@ -278,7 +278,7 @@ class _SoMaterialLocalizationsDelegate
   }
 
   @override
-  bool shouldReload(final _SoMaterialLocalizationsDelegate old) => false;
+  bool shouldReload(_SoMaterialLocalizationsDelegate old) => false;
 }
 // #enddocregion Delegate
 

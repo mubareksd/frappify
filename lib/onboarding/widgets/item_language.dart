@@ -30,9 +30,6 @@ class ItemLanguage extends StatelessWidget {
                         locale.languageCode.contains('en')
                     ? locale.languageCode
                     : 'am',
-                shape: const RoundedRectangle(2),
-                width: 25,
-                height: 15,
               ),
               const SizedBox(
                 width: 10,
