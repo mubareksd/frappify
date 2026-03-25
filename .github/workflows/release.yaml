@@ -1,0 +1,59 @@
+name: 🚀 Build & Release
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    name: 🛠️ Build & Deploy
+    runs-on: ubuntu-latest
+    env:
+      ENTRY_POINT: 'lib/main/main_production.dart'
+
+    steps:
+      - name: 🛠️ Setup Environment
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: webfactory/ssh-agent@v0.10.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: 📱 Setup Flutter 3.41.5
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: "3.41.5"
+          channel: "stable"
+          cache: true
+
+      - name: 📦 Install Dependencies
+        run: |
+          set -euo pipefail
+          dart pub global activate melos
+          melos bootstrap
+
+      - name: 🏗️ Run Build Runner
+        run: |
+          set -euo pipefail
+          flutter pub run build_runner build --delete-conflicting-outputs || \
+            { echo "Build runner failed"; exit 1; }
+
+      - name: 🏗️ Build Web App
+        run: |
+          set -euo pipefail
+          echo "🚀 Starting build for ${{ github.ref_name }} branch"
+          flutter build web --release -t $ENTRY_POINT
+
+      - name: 📤 Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          personal_token: ${{ secrets.GH_TOKEN }}
+          external_repository: ${{ secrets.DEPLOYMENT_REPO }}
+          publish_dir: ./build/web
+          publish_branch: main
